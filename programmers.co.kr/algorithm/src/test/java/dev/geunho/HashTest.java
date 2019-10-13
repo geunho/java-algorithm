@@ -79,4 +79,26 @@ public class HashTest {
 
         assertEquals(3, result);
     }
+
+    @Test
+    public void 베스트앨범_test_case_1() {
+        String[] genres = { "classic", "pop", "classic", "classic", "pop" };        
+        int[] plays = { 500, 600, 150, 800, 2500 };
+
+        int[] result = Hash.베스트앨범(genres, plays);
+
+        int[] expected = { 4, 1, 3, 0 };
+        assertArrayEquals(expected, result);
+    }
+
+    @Test
+    public void 베스트앨범_test_case_2() {
+        String[] genres = { "classic", "classic", "classic", "pop" };        
+        int[] plays = { 500, 150, 800, 2500 };
+
+        int[] result = Hash.베스트앨범(genres, plays);
+
+        int[] expected = { 3, 2, 0 };
+        assertArrayEquals(expected, result);
+    }
 }

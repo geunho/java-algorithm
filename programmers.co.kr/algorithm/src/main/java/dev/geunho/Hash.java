@@ -1,7 +1,16 @@
 package dev.geunho;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import static java.util.stream.Collectors.*;
+
+ 
 
 public class Hash {
 
@@ -73,6 +82,12 @@ public class Hash {
         return true;
     }
 
+    /**
+     * 위장
+     * https://programmers.co.kr/learn/courses/30/lessons/42578
+     * @param clothes
+     * @return combination
+     */
     public static int 위장(String[][] clothes) {
         int answer = 1;
 
@@ -95,5 +110,110 @@ public class Hash {
 
         // 1을(모두 입지 않은 경우) 뺀 후 반환한다.
         return --answer;
+    }
+
+    /**
+     * 베스트앨범
+     * https://programmers.co.kr/learn/courses/30/lessons/42579
+     * @param genres
+     * @param plays
+     * @return orderOfPlays
+     */
+    public static int[] 베스트앨범(String[] genres, int[] plays) {
+        int[] answer = {};
+
+        // <장르, 총 재생 횟수> 집계 테이블을 생성
+        // <장르, 정렬된 곡 목록> 테이블 생성
+        // 장르 길이만큼 순회 : N
+        Hashtable<String, Integer> genreTotalCounts = new Hashtable<String, Integer>();
+        Hashtable<String, List<Play>> playLists = new Hashtable<String, List<Play>>();
+        int numberOfSongs = genres.length;
+        
+        for (int id = 0; id < numberOfSongs; id++) {
+            String genre = genres[id];
+            int play = plays[id];
+            
+            if (genreTotalCounts.containsKey(genre)) {
+                int count = genreTotalCounts.get(genre);
+                genreTotalCounts.put(genre, count + play);
+            } else {
+                genreTotalCounts.put(genre, play);
+            }
+
+            if (playLists.containsKey(genre)) {
+                // 장르 순위에 따라 정렬된 곡 목록의 아이디 값을 연결 리스트에 추가
+                List<Play> playList = playLists.get(genre);
+                playList.add(new Play(id, genre, play));
+            } else {
+                List<Play> playList = new ArrayList<Play>();
+                playList.add(new Play(id, genre, play));
+                playLists.put(genre, playList);
+            }
+        }
+
+        // 총 재생 횟수의 내림차순으로 정렬 (최대 99개로 성능에 영향 없음)
+        Map<String, Integer> sortedGenreTotalCounts = genreTotalCounts
+            .entrySet()
+            .stream()
+            .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+            .collect(
+                toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2,
+                    LinkedHashMap::new));
+
+        List<Integer> result = new ArrayList<Integer>();
+        for (String genre : sortedGenreTotalCounts.keySet()) {
+            List<Play> playList = playLists.get(genre);
+            Collections.sort(playList);
+            
+            // 상위 두 개만 추가
+            int size = playList.size() > 1 ? 2 : playList.size();
+            for (int i = 0; i < size; i++) {
+                result.add(playList.get(i).getId());
+            }
+        }
+
+        // 배열로 출력
+        answer = result.stream().mapToInt(i -> i).toArray();
+
+        return answer;
+    }
+}
+
+class Play implements Comparable<Play> {
+    private int id;
+    private String genre;
+    private int numberOfPlay;
+
+    Play(int id, String genre, int numberOfPlay) {
+        this.id = id;
+        this.genre = genre;
+        this.numberOfPlay = numberOfPlay;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public int getNumberOfPlay() {
+        return this.numberOfPlay;
+    }
+
+    @Override
+    public int compareTo(Play o) {
+        if (this.numberOfPlay > o.numberOfPlay) {
+            return -1;
+        }
+        if (this.numberOfPlay < o.numberOfPlay) {
+            return 1;
+        }
+        
+        if (this.id < o.id) {
+            return -1;
+        }
+        if (this.id > o.id) {
+            return 1;
+        }
+
+        return 0;
     }
 }
