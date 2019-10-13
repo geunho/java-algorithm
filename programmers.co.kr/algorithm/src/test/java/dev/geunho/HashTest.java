@@ -34,4 +34,31 @@ public class HashTest {
 
         assertEquals("mislav", result);
     }
+
+    @Test
+    public void 전화번호_목록_test_case_1() {
+        String[] phone_book = { "119", "97674223", "1195524421" };
+        
+        boolean result = Hash.전화번호_목록(phone_book);
+
+        assertEquals(false, result);
+    }
+
+    @Test
+    public void 전화번호_목록_test_case_2() {
+        String[] phone_book = { "123", "456", "789" };
+        
+        boolean result = Hash.전화번호_목록(phone_book);
+
+        assertEquals(true, result);
+    }
+
+    @Test
+    public void 전화번호_목록_test_case_3() {
+        String[] phone_book = { "12", "123", "1235", "567", "88" };
+        
+        boolean result = Hash.전화번호_목록(phone_book);
+
+        assertEquals(false, result);
+    }
 }

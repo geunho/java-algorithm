@@ -1,5 +1,6 @@
 package dev.geunho;
 
+import java.util.HashSet;
 import java.util.Hashtable;
 
 public class Hash {
@@ -48,5 +49,27 @@ public class Hash {
         }
         
         return answer;
+    }
+
+    /**
+     * 전화번호 목록
+     * https://programmers.co.kr/learn/courses/30/lessons/42577
+     * @param phone_book
+     * @return prefixExists
+     */
+    public static boolean 전화번호_목록(String[] phone_book) {
+        // hash set 생성 후 phone_book 순차 조회 시작 : N
+        HashSet<String> phoneBookSet = new HashSet<String>();
+        for (String phoneNumber : phone_book) {
+            // hash set 항목 중 phone_book의 하위 혹은 상위 항목이 되는 경우가 있다면 false 반환 : N
+            for (String el : phoneBookSet) {
+                if (phoneNumber.startsWith(el) || el.startsWith(phoneNumber)) return false;
+            }
+            // 없다면 hash set에 삽입
+            phoneBookSet.add(phoneNumber);
+        }
+
+        // 모두 삽입되고 끝나면 true 반환
+        return true;
     }
 }
