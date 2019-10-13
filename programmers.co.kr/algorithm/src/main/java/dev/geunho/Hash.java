@@ -72,4 +72,28 @@ public class Hash {
         // 모두 삽입되고 끝나면 true 반환
         return true;
     }
+
+    public static int 위장(String[][] clothes) {
+        int answer = 1;
+
+        // clothes 배열을 순회해서 <종류, 갯수>인 해시맵을 생성한다. 
+        Hashtable<String, Integer> counts = new Hashtable<String, Integer>();
+        for (String[] piece : clothes) {
+            String category = piece[1];
+            if (counts.containsKey(category)) {
+                int count = counts.get(category);
+                counts.put(category, ++count);
+            } else {
+                counts.put(category, 1);
+            }
+        }
+        
+        // 갯수 + 1(입지 않는 경우)를 모두 곱한다.
+        for (String category : counts.keySet()) {
+            answer *= (counts.get(category) + 1);
+        }
+
+        // 1을(모두 입지 않은 경우) 뺀 후 반환한다.
+        return --answer;
+    }
 }

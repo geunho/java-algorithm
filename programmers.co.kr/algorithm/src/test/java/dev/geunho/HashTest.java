@@ -61,4 +61,22 @@ public class HashTest {
 
         assertEquals(false, result);
     }
+
+    @Test
+    public void 위장_test_case_1() {        
+        String[][] clothes = { {"yellow_hat", "headgear"}, {"blue_sunglasses", "eyewear"}, {"green_turban", "headgear"}};
+
+        int result = Hash.위장(clothes);
+
+        assertEquals(5, result);
+    }
+
+    @Test
+    public void 위장_test_case_2() {
+        String[][] clothes = { {"crow_mask", "face"}, {"blue_sunglasses", "face"}, {"smoky_makeup", "face"}};
+
+        int result = Hash.위장(clothes);
+
+        assertEquals(3, result);
+    }
 }
