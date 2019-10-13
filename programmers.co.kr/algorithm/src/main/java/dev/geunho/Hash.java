@@ -1,16 +1,9 @@
 package dev.geunho;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
-
- 
 
 public class Hash {
 
@@ -120,8 +113,6 @@ public class Hash {
      * @return orderOfPlays
      */
     public static int[] 베스트앨범(String[] genres, int[] plays) {
-        int[] answer = {};
-
         // <장르, 총 재생 횟수> 집계 테이블을 생성
         // <장르, 정렬된 곡 목록> 테이블 생성
         // 장르 길이만큼 순회 : N
@@ -163,17 +154,19 @@ public class Hash {
         List<Integer> result = new ArrayList<Integer>();
         for (String genre : sortedGenreTotalCounts.keySet()) {
             List<Play> playList = playLists.get(genre);
-            Collections.sort(playList);
-            
-            // 상위 두 개만 추가
-            int size = playList.size() > 1 ? 2 : playList.size();
-            for (int i = 0; i < size; i++) {
-                result.add(playList.get(i).getId());
-            }
+
+            // 정렬된 목록의 상위 두 개만 추가
+            List<Integer> topTwoIds = playList
+                .stream()
+                .sorted()
+                .limit(2)
+                .map(p -> p.getId())
+                .collect(Collectors.toList());
+            result.addAll(topTwoIds);
         }
 
         // 배열로 출력
-        answer = result.stream().mapToInt(i -> i).toArray();
+        int[] answer = result.stream().mapToInt(i -> i).toArray();
 
         return answer;
     }
@@ -200,20 +193,9 @@ class Play implements Comparable<Play> {
 
     @Override
     public int compareTo(Play o) {
-        if (this.numberOfPlay > o.numberOfPlay) {
-            return -1;
+        if (this.numberOfPlay == o.numberOfPlay) {
+            return this.id - o.id;
         }
-        if (this.numberOfPlay < o.numberOfPlay) {
-            return 1;
-        }
-        
-        if (this.id < o.id) {
-            return -1;
-        }
-        if (this.id > o.id) {
-            return 1;
-        }
-
-        return 0;
+        return o.numberOfPlay - this.numberOfPlay;
     }
 }
