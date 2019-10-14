@@ -70,4 +70,55 @@ public class SortTest {
 
         assertEquals(expected, result);
     }
+
+    @Test
+    public void H_Index_test_case_1() {
+        //입력값 〉	[3, 0, 6, 1, 5]
+        //기댓값 〉	3
+        int[] citations = { 3, 0, 6, 1, 5 };
+
+        int result = Sort.H_Index(citations);
+
+        assertEquals(3, result);
+    }
+
+    @Test
+    public void H_Index_test_case_2() {
+        //입력값 〉	[3, 10, 8, 4, 5]
+        //기댓값 〉	4
+        int[] citations = { 3, 10, 8, 4, 5 };
+
+        int result = Sort.H_Index(citations);
+
+        assertEquals(4, result);
+    }
+
+    @Test
+    public void H_Index_test_case_3() {
+        //입력값 〉	[3, 8, 25, 3, 5]
+        //기댓값 〉	3
+        int[] citations = { 3, 8, 25, 3, 5 };
+
+        int result = Sort.H_Index(citations);
+
+        assertEquals(3, result);
+    }
+
+    @Test
+    public void H_Index_test_case_4() {
+        int[] citations = { 20, 19, 18, 1 };
+
+        int result = Sort.H_Index(citations);
+
+        assertEquals(3, result);
+    }
+
+    @Test
+    public void H_Index_test_case_5() {
+        int[] citations = { 22, 42 };
+
+        int result = Sort.H_Index(citations);
+
+        assertEquals(2, result);
+    }
 }

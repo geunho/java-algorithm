@@ -55,4 +55,26 @@ public class Sort {
         
         return result.toString();
     }
+
+    /**
+     * H-Index https://programmers.co.kr/learn/courses/30/lessons/42747
+     * 
+     * @param citations
+     * @return h-index
+     */
+    public static int H_Index(int[] citations) {
+        List<Integer> citationsList = new ArrayList<Integer>(citations.length);
+        for (int citation : citations) citationsList.add(citation);
+        
+        // 내림차순 정렬 후
+        Collections.sort(citationsList, Comparator.reverseOrder());
+
+        // 순회하면서 index와 수가 일치하거나 index가 큰 경우 큰 값을 반환
+        for (int index = 0; index < citations.length; index++) {
+            int citation = citationsList.get(index);
+            if (citation <= index) return index;
+        }
+
+        return citations.length;
+    }
 }
