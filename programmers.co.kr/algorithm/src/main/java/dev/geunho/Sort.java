@@ -1,9 +1,6 @@
 package dev.geunho;
 
 import java.util.*;
-// import java.util.stream.Collectors;
-
-// import static java.util.stream.Collectors.*;
 
 public class Sort {
     /**
@@ -39,16 +36,23 @@ public class Sort {
      * @param numbers
      * @return biggestNumber
      */
-    public static String 가장_큰_수(int[] numbers) {
-        StringBuilder answer = new StringBuilder();
+    public static String 가장_큰_수(int[] numbers) {    
+        Object[] numbersList = Arrays.stream(numbers).boxed().toArray();
+        // 내림차순 정렬
+        Arrays.sort(numbersList, (Object n1, Object n2) -> {
+                String n1n2 = n1.toString() + n2.toString();
+                String n2n1 = n2.toString() + n1.toString();
+                return Integer.valueOf(n2n1) - Integer.valueOf(n1n2);
+            }
+        );
 
-        // 최대 자릿수를 찾고 -> N
+        // 가장 큰 값이 0이면 결과는 "0"
+        if ((int)numbersList[0] == 0) return "0";
 
-        // 자릿수에 대한 기댓값 (예. 자릿수가 3이라면: 3-> 333, 34 -> 344) 반환하는 메서드로 정렬 -> N
-
-        // 정렬된 배열을 문자열로 연결해서 출력 -> N
-        // O(3N) -> O(N) 가능
-
-        return answer.toString();
+        // 정렬된 배열을 문자열로 연결해서 출력
+        StringBuilder result = new StringBuilder();
+        for (Object number : numbersList) result.append(number);
+        
+        return result.toString();
     }
 }

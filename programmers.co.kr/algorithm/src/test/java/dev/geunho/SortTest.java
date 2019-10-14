@@ -51,9 +51,20 @@ public class SortTest {
 
     @Test
     public void 가장_큰_수_test_case_4() {
-        int[] numbers = { 0, 0, 0, 0 };
+        int[] numbers = { 40, 403 };
+        // prefix인 경우 prefix되는 항목이 우선 나와야 한다.
+        String expected = "40403";
 
-        String expected = "0";
+        String result = Sort.가장_큰_수(numbers);
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void 가장_큰_수_test_case_5() {
+        int[] numbers = { 40, 40305 };
+        // prefix인 경우 prefix되는 항목이 우선 나와야 한다.
+        String expected = "4040305";
 
         String result = Sort.가장_큰_수(numbers);
 
