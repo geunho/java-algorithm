@@ -17,50 +17,74 @@ class myCode4 {
         // 9,223,372,036,854,775,807 (  long)
         long W = Long.valueOf(br.readLine());
 
-        // 입력 값과 개수가 매우 크므로 (> int) 매 입력마다 처리하도록 해야함
-        // endline이 없음
+        WindowQueue queue = new WindowQueue(W);
 
-        // <값, 개수> 트리 맵 생성 
-        TreeMap<Long, Integer> orderdedWindow = new TreeMap<>();
-        // ArrayList는 배열 개수 제한인 int 크기 제한이 있으므로 LinkedList 사용
-        LinkedList<Long> queue = new LinkedList<>();
-        
         for (;;) {
+            // 입력 값과 개수가 매우 크므로 (> int) 매 입력마다 처리하도록 해야함
             String line = br.readLine();
-            if (line == null) return;
+            if (line == null || line.isEmpty()) return;
 
-            long number = Long.valueOf(line);            
-
-            // 스트림 값이 입력될 때마다 queue와 tree에 입력
+            long number = Long.valueOf(line);
             queue.add(number);
 
-            // tree에 이미 값이 있다면 카운트 증가
-            if (orderdedWindow.containsKey(number)) {
-                int count = orderdedWindow.get(number);
-                orderdedWindow.put(number, ++count);
-            } else {
-                orderdedWindow.put(number, 1);
-            }
-
-            // 윈도우 크기에 도달하면 tree의 마지막 값 (가장 큰 수) 출력
-            if (queue.size() == W) {
-                long max = orderdedWindow.lastKey();
-                System.out.println(max);
-            } else if (queue.size() > W) {
-                // 이후 값이 입력될 때마다 첫 번째 값을 제거
-                long shouldRemoved = queue.removeFirst();
-
-                // tree의 카운트 감소
-                int count = orderdedWindow.get(shouldRemoved) - 1;
-                if (count == 0) { // 카운트가 0이 되면 노드를 제거
-                    orderdedWindow.remove(shouldRemoved);
-                } else {
-                    orderdedWindow.put(shouldRemoved, count);
-                }
-
-                long max = orderdedWindow.lastKey();
+            // 윈도우 크기에 도달하면 윈도우 값 중 가장 큰 값을 출력
+            if (queue.isFull()) {
+                long max = queue.max();
                 System.out.println(max);
             }
         }
     }
 }
+
+class WindowQueue {
+    private final long maxSize;
+
+    // LinkedList.size() 최대 값은 Integer.MAX_VALUE 이므로 long형 멤버를 선언
+    private long count;
+    private LinkedList<Long> innerList;
+    // <값, 개수> 트리 맵
+    TreeMap<Long, Integer> orderdedWindow;
+
+    public WindowQueue(long maxSize) {
+        this.innerList = new LinkedList<>();
+        this.orderdedWindow = new TreeMap<>();
+        this.count = 0;
+        this.maxSize = maxSize;
+    }
+
+    public void add(long value) {
+        this.innerList.addLast(value);
+
+        int occurrence = orderdedWindow.getOrDefault(value, 0);
+        orderdedWindow.put(value, ++occurrence);
+
+        this.count++;
+
+        if (this.count > this.maxSize) {
+            // 최대 크기를 넘어가면 가장 먼저 입력된 값을 제거
+            long shouldRemoved = this.innerList.removeFirst();
+
+            int subOccurrence = orderdedWindow.get(shouldRemoved) - 1;
+            if (subOccurrence == 0) { // 0이 되면 노드를 제거
+                orderdedWindow.remove(shouldRemoved);
+            } else {
+                orderdedWindow.put(shouldRemoved, subOccurrence);
+            }
+
+            this.count--;
+        }
+    }
+
+    public long size() {
+        return this.count;
+    }
+
+    public long max() {
+        return orderdedWindow.lastKey();
+    }
+
+    public boolean isFull() {
+        return this.count == this.maxSize;
+    }
+}
+
