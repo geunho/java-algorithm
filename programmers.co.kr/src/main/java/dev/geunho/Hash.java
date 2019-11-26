@@ -174,12 +174,10 @@ public class Hash {
 
 class Play implements Comparable<Play> {
     private int id;
-    private String genre;
     private int numberOfPlay;
 
     Play(int id, String genre, int numberOfPlay) {
         this.id = id;
-        this.genre = genre;
         this.numberOfPlay = numberOfPlay;
     }
 

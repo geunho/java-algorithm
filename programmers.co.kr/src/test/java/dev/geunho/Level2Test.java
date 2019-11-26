@@ -2,8 +2,6 @@ package dev.geunho;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.logging.Level;
-
 import org.junit.Test;
 
 public class Level2Test {

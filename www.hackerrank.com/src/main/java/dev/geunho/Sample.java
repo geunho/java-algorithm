@@ -50,7 +50,7 @@ public class Sample {
                 generatorsStopped += count;
                 modelsStopped++;
             } else {
-                break;s
+                break;
             }
         }
 
